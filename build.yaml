@@ -1,0 +1,10 @@
+builders:
+  protofu:
+    import: "package:protofu/builder.dart"
+    builder_factories: ["getBuilder"]
+    build_extensions: {"proto/{{}}.proto": ["lib/proto/{{}}.pb.dart", "lib/proto/{{}}.pbenum.dart", "lib/proto/{{}}.pbserver.dart", "lib/proto/{{}}.pbgrpc.dart"]}
+    auto_apply: dependents
+    build_to: source
+    defaults:
+      generate_for:
+        - "proto/**"
