@@ -37,9 +37,18 @@ Future<String> _compilePlugin(String pluginRoot) async {
   if (await File(exePath).exists()) return exePath;
 
   final scriptPath = p.join(pluginRoot, 'bin', 'protoc_plugin.dart');
+  final packageConfigPath = p.join(
+    Directory.current.path,
+    '.dart_tool',
+    'package_config.json',
+  );
   final result = await Process.run(
     'dart',
-    ['compile', 'exe', scriptPath, '-o', exePath],
+    [
+      'compile', 'exe', scriptPath,
+      '-o', exePath,
+      '--packages', packageConfigPath,
+    ],
   );
 
   if (result.exitCode != 0) {
