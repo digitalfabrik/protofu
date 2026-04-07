@@ -26,3 +26,38 @@ Eventual goal:
 
 [x] `dart pub global activate protofu`
 [x] `protofu` then helps you.
+
+# This was forked to be able to use the plugin within our build runner in the entitlementcard project
+## Example
+```
+ How to use in entitlementcard
+
+  pubspec.yaml:
+  dev_dependencies:
+    build_runner: ^2.13.1
+    protofu:
+      git:
+        url: https://github.com/<your-fork>/protofu.git
+    protoc_plugin: ^21.1.2
+
+  build.yaml:
+  targets:
+    $default:
+      sources:
+        - proto/**
+      builders:
+        protofu:
+          options:
+            protobuf_version: "27.5"
+            use_protoc_plugin_from_pubspec: true
+            root_dir: "proto/"
+            proto_paths:
+              - "proto/"
+            out_dir: "lib/proto"
+            grpc: false
+            precompile_protoc_plugin: true
+
+```
+
+
+
