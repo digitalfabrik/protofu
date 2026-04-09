@@ -1,3 +1,20 @@
+# ProtoFu-Builder
+This is a fork of https://github.com/jtmcdole/protofu
+The ProtoFu builder can be used within a flutter/dart build runner of your project.
+
+## Example
+```
+pubspec.yaml:
+  dev_dependencies:
+    build_runner: ^2.13.1
+    protofu:
+      git:
+        url: https://github.com/digitalfabrik/protofu_builder.git
+    protoc_plugin: ^21.1.2
+```
+
+
+
 # ProtoFu - let me compile that for you
 
 ProtoFu exists to make working with protobufs easier. Gone are the days of downloading
@@ -27,24 +44,16 @@ Eventual goal:
 [x] `dart pub global activate protofu`
 [x] `protofu` then helps you.
 
-# This was forked to be able to use the plugin within our build runner in the entitlementcard project
-## Example
+## Use protofu within the dart build runner
+### Example
 ```
- How to use in entitlementcard
-
-  pubspec.yaml:
+pubspec.yaml:
   dev_dependencies:
     build_runner: ^2.13.1
-    protofu:
-      git:
-        url: https://github.com/<your-fork>/protofu.git
+    protofu: <recent version>
     protoc_plugin: ^21.1.2
 
   build.yaml:
-  targets:
-    $default:
-      sources:
-        - proto/**
       builders:
         protofu:
           options:
@@ -56,7 +65,6 @@ Eventual goal:
             out_dir: "lib/proto"
             grpc: false
             precompile_protoc_plugin: true
-
 ```
 
 

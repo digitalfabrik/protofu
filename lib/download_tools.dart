@@ -26,6 +26,11 @@ import 'package:protofu/spinner.dart';
 import 'package:protofu/unzip.dart';
 
 bool _isArm() {
+  if (Platform.isWindows) {
+    // PROCESSOR_ARCHITECTURE is 'AMD64' for x86-64, 'ARM64' for ARM.
+    final arch = Platform.environment['PROCESSOR_ARCHITECTURE'] ?? '';
+    return arch.toUpperCase() == 'ARM64';
+  }
   // uname -m returns arm64 on Apple Silicon and aarch64 on Linux ARM.
   try {
     final result = Process.runSync('uname', ['-m']);
