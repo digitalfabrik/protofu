@@ -65,9 +65,8 @@ Future<String> _compilePlugin(String pluginRoot) async {
 /// Creates a shell wrapper script that runs the plugin via `dart run` (slower
 /// than precompiled, but avoids the compile step).
 String _dartRunWrapper(String pluginRoot) {
-  final scriptPath = p.join(pluginRoot, 'bin', 'protoc_plugin.dart');
   // protoc --plugin expects an executable; `dart run <script>` works on all
   // platforms when passed as the plugin path if Dart is on PATH.
   // Return the script path directly — callers should prefer precompile: true.
-  return scriptPath;
+  return p.join(pluginRoot, 'bin', 'protoc_plugin.dart');
 }
