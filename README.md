@@ -1,20 +1,3 @@
-# ProtoFu-Builder
-This is a fork of https://github.com/jtmcdole/protofu
-The ProtoFu builder can be used within a flutter/dart build runner of your project.
-
-## Example
-```
-pubspec.yaml:
-  dev_dependencies:
-    build_runner: ^2.13.1
-    protofu:
-      git:
-        url: https://github.com/digitalfabrik/protofu_builder.git
-    protoc_plugin: ^21.1.2
-```
-
-
-
 # ProtoFu - let me compile that for you
 
 ProtoFu exists to make working with protobufs easier. Gone are the days of downloading
