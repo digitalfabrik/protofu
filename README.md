@@ -13,20 +13,7 @@ pubspec.yaml:
     protoc_plugin: ^21.1.2
 ```
 
-```
-  build.yaml:
-      builders:
-        protofu:
-          options:
-            protobuf_version: "27.5"
-            use_protoc_plugin_from_pubspec: true
-            root_dir: "proto/"
-            proto_paths:
-              - "proto/"
-            out_dir: "lib/proto"
-            grpc: false
-            precompile_protoc_plugin: true
-```
+
 
 # ProtoFu - let me compile that for you
 
@@ -56,6 +43,28 @@ Eventual goal:
 
 [x] `dart pub global activate protofu`
 [x] `protofu` then helps you.
+
+## Use protofu within the dart build runner
+```
+pubspec.yaml:
+  dev_dependencies:
+    build_runner: ^2.13.1
+    protofu: <recent version>
+    protoc_plugin: ^21.1.2
+
+  build.yaml:
+      builders:
+        protofu:
+          options:
+            protobuf_version: "27.5"
+            use_protoc_plugin_from_pubspec: true
+            root_dir: "proto/"
+            proto_paths:
+              - "proto/"
+            out_dir: "lib/proto"
+            grpc: false
+            precompile_protoc_plugin: true
+```
 
 
 
