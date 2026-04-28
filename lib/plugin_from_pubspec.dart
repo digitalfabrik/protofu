@@ -18,7 +18,7 @@ Future<String?> resolvePluginFromPubspec(bool precompile) async {
       final pluginRoot = package.root.toFilePath();
       return precompile
           ? await _compilePlugin(pluginRoot)
-          : _dartRunWrapper(pluginRoot);
+          : await _dartRunWrapper(pluginRoot);
     }
   }
 
@@ -62,11 +62,30 @@ Future<String> _compilePlugin(String pluginRoot) async {
   return exePath;
 }
 
-/// Creates a shell wrapper script that runs the plugin via `dart run` (slower
-/// than precompiled, but avoids the compile step).
-String _dartRunWrapper(String pluginRoot) {
-  // protoc --plugin expects an executable; `dart run <script>` works on all
-  // platforms when passed as the plugin path if Dart is on PATH.
-  // Return the script path directly — callers should prefer precompile: true.
-  return p.join(pluginRoot, 'bin', 'protoc_plugin.dart');
+/// Creates a wrapper script that runs the plugin via `dart run` (slower than
+/// precompiled, but avoids the compile step). The wrapper is cached under
+/// `.dart_tool/build/protofu/plugin/pubspec/`.
+///
+/// On Unix a shell script is written; on Windows a `.bat` file. Both are
+/// executable so `protoc --plugin=protoc-gen-dart=<path>` works correctly.
+Future<String> _dartRunWrapper(String pluginRoot) async {
+  final scriptPath = p.join(pluginRoot, 'bin', 'protoc_plugin.dart');
+  final cacheDir = Directory(p.join(pluginDirectory.path, 'pubspec'));
+  await cacheDir.create(recursive: true);
+
+  if (Platform.isWindows) {
+    final wrapperPath = p.join(cacheDir.path, 'protoc-gen-dart.bat');
+    if (!await File(wrapperPath).exists()) {
+      await File(wrapperPath).writeAsString('@echo off\ndart run "$scriptPath" %*\n');
+    }
+    return wrapperPath;
+  } else {
+    final wrapperPath = p.join(cacheDir.path, 'protoc-gen-dart');
+    if (!await File(wrapperPath).exists()) {
+      await File(wrapperPath)
+          .writeAsString('#!/bin/sh\nexec dart run "$scriptPath" "\$@"\n');
+      await Process.run('chmod', ['+x', wrapperPath]);
+    }
+    return wrapperPath;
+  }
 }
