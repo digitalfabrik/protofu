@@ -1,20 +1,3 @@
-# ProtoFu-Builder
-This is a fork of https://github.com/jtmcdole/protofu
-The ProtoFu builder can be used within a flutter/dart build runner of your project.
-
-## Example
-```
-pubspec.yaml:
-  dev_dependencies:
-    build_runner: ^2.13.1
-    protofu:
-      git:
-        url: https://github.com/digitalfabrik/protofu_builder.git
-    protoc_plugin: ^21.1.2
-```
-
-
-
 # ProtoFu - let me compile that for you
 
 ProtoFu exists to make working with protobufs easier. Gone are the days of downloading
@@ -44,26 +27,32 @@ Eventual goal:
 [x] `dart pub global activate protofu`
 [x] `protofu` then helps you.
 
-## Use protofu within the dart build runner
-```
-pubspec.yaml:
-  dev_dependencies:
-    build_runner: ^2.13.1
-    protofu: <recent version>
-    protoc_plugin: ^21.1.2
 
-  build.yaml:
-      builders:
-        protofu:
-          options:
-            protobuf_version: "27.5"
-            use_protoc_plugin_from_pubspec: true
-            root_dir: "proto/"
-            proto_paths:
-              - "proto/"
-            out_dir: "lib/proto"
-            grpc: false
-            precompile_protoc_plugin: true
+## Use protofu within the dart build runner
+
+Add `protofu` and `protoc_plugin` to your `dev_dependencies` and configure `build.yaml`:
+
+```yaml
+# pubspec.yaml
+dev_dependencies:
+  build_runner: ^2.13.1
+  protofu: ^1.3.0
+  protoc_plugin: ^21.1.2
+```
+
+```yaml
+# build.yaml
+builders:
+  protofu:
+    options:
+      protobuf_version: "27.5"
+      use_protoc_plugin_from_pubspec: true
+      root_dir: "proto/"
+      proto_paths:
+        - "proto/"
+      out_dir: "lib/proto"
+      grpc: false
+      precompile_protoc_plugin: true
 ```
 
 
