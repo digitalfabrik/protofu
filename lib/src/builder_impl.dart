@@ -8,13 +8,26 @@ import 'package:protofu/download_tools.dart';
 import 'package:protofu/paths.dart';
 import 'package:protofu/plugin_from_pubspec.dart';
 
-class ProtofuBuilder implements Builder {
+/// A [Builder] that compiles `.proto` files to Dart using `protoc`.
+///
+/// Intended to be used via `build_runner`. Configure via `build.yaml` options:
+/// - `root_dir` (default: `proto/`): directory containing `.proto` source files.
+/// - `out_dir` (default: `lib/proto/`): output directory for generated Dart files.
+/// - `grpc` (default: `false`): whether to generate gRPC stubs.
+/// - `proto_paths` (default: `[root_dir]`): additional `-I` paths for `protoc`.
+/// - `protobuf_version` (default: `27.5`): `protoc` version to download.
+/// - `use_installed_protoc` (default: `false`): use system `protoc` instead of downloading.
+/// - `use_protoc_plugin_from_pubspec` (default: `true`): resolve `protoc_plugin` from pubspec dependencies.
+/// - `precompile_protoc_plugin` (default: `true`): AOT-compile the plugin for faster execution.
+/// - `dart_plugin_version` (default: `21.1.2`): plugin version to download if not resolved from pubspec.
+final class ProtofuBuilder implements Builder {
   final BuilderOptions _options;
 
   // Shared across all builder instances in the same process to avoid
   // redundant downloads/compilations when multiple .proto files are built.
   static Future<void>? _setupFuture;
 
+  /// Creates a [ProtofuBuilder] with the given [options].
   ProtofuBuilder(this._options);
 
   String get _rootDir {
