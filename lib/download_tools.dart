@@ -27,9 +27,12 @@ import 'package:protofu/unzip.dart';
 
 bool _isArm() {
   if (Platform.isWindows) {
-    // PROCESSOR_ARCHITECTURE is 'AMD64' for x86-64, 'ARM64' for ARM.
+    // PROCESSOR_ARCHITECTURE may be 'x86' when a 32-bit process runs on a
+    // 64-bit OS; PROCESSOR_ARCHITEW6432 is set to the native arch in that
+    // case, so check both to correctly detect ARM64 under emulation.
     final arch = Platform.environment['PROCESSOR_ARCHITECTURE'] ?? '';
-    return arch.toUpperCase() == 'ARM64';
+    final arch6432 = Platform.environment['PROCESSOR_ARCHITEW6432'] ?? '';
+    return arch.toUpperCase() == 'ARM64' || arch6432.toUpperCase() == 'ARM64';
   }
   // uname -m returns arm64 on Apple Silicon and aarch64 on Linux ARM.
   try {
